@@ -68,14 +68,14 @@ def write_in_csv(infos):
     return True
 
 def feed_list_spender():
+    list_spender.clear()
     with open('users.csv','r') as users:
         csv_reader = reader(users)
         for row in csv_reader:
             list_spender.append(row[0])
 
 def new_expense(*args):
-    if (len(list_spender) == 0):
-        feed_list_spender()
+    feed_list_spender()
     infos = prompt(expense_questions)
     if (not check_input(infos)):
         return False
