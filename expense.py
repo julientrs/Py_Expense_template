@@ -21,6 +21,32 @@ expense_questions = [
     },
 ]
 
+def try_catch_int(input):
+    try:
+        value = int(input)
+        return True
+    except ValueError:
+        print("A number was excepted ! - Insertion Failed.")
+        return False
+
+def try_catch_str(input):
+    try:
+        value = int(input)
+        print("Not a number ! - Insertion Failed.")
+        return False
+    except ValueError:
+        return True
+
+def check_input(infos):
+    for (key, value) in infos.items():
+        if (key == "amount"):
+            if (not try_catch_int(value)):
+                return False
+        elif (key == "label" or key == "spender"):
+            if (not try_catch_str(value)):
+                return False
+    return True
+
 def write_in_csv(infos):
     line = []
     # Open file in append mode
@@ -35,6 +61,8 @@ def write_in_csv(infos):
 
 def new_expense(*args):
     infos = prompt(expense_questions)
+    if (not check_input(infos)):
+        return False
     insertion = write_in_csv(infos)
     if (insertion == True):
         print("Expense Added !")
