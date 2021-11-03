@@ -1,7 +1,9 @@
 from PyInquirer import prompt
-from csv import writer
+from csv import writer, reader
 
 file_name = "expense_report.csv"
+
+list_spender = []
 
 expense_questions = [
     {
@@ -14,10 +16,16 @@ expense_questions = [
         "name":"label",
         "message":"New Expense - Label: ",
     },
+    # {
+    #     "type":"input",
+    #     "name":"spender",
+    #     "message":"New Expense - Spender: ",
+    # },
     {
-        "type":"input",
-        "name":"spender",
-        "message":"New Expense - Spender: ",
+        "type":"list",
+        "name":"list_spender",
+        "message":"Pick a spender:",
+        "choices": list_spender
     },
 ]
 
@@ -59,7 +67,15 @@ def write_in_csv(infos):
         csv_writer.writerow(line)
     return True
 
+def feed_list_spender():
+    with open('users.csv','r') as users:
+        csv_reader = reader(users)
+        for row in csv_reader:
+            list_spender.append(row[0])
+
 def new_expense(*args):
+    if (len(list_spender) == 0):
+        feed_list_spender()
     infos = prompt(expense_questions)
     if (not check_input(infos)):
         return False
@@ -69,5 +85,3 @@ def new_expense(*args):
         return True
     print("Insertion failed !")
     return False
-
-
